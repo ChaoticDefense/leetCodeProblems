@@ -1,12 +1,12 @@
 class Solution:
     def twoSum(self, nums: list[int], target: int) -> list[int]:
         
-        for num1 in nums:
-            for num2 in nums:
-                if num1 != num2 and num1 + num2 == target:
-                    return [num1, num2]
+        for idx1, num1 in enumerate(nums):
+            for idx2, num2 in enumerate(nums):
+                if idx1 != idx2 and num1 + num2 == target:
+                    return [idx1, idx2]
 
         return [num1, num2]
 
 s = Solution()
-print(s.twoSum([2,7,11,15], 9))
+print(s.twoSum([3,3], 6))
