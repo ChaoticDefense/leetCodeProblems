@@ -1,12 +1,21 @@
 class Solution:
     def twoSum(self, nums: list[int], target: int) -> list[int]:
         
-        for idx1, num1 in enumerate(nums):
-            for idx2, num2 in enumerate(nums):
-                if idx1 != idx2 and num1 + num2 == target:
-                    return [idx1, idx2]
+        # Make map to remember where we have seen numbers as we iterate
+        hashmap = {} # {num: index}
 
-        return [num1, num2]
+        for i in range(len(nums)):
+            current = nums[i]
+            # current + x = target
+            # x = target - current
+            x = target - current
+
+            if x in hashmap:
+                return [hashmap[x], i]
+
+            hashmap[current] = i
+
+        return []
 
 s = Solution()
-print(s.twoSum([3,3], 6))
+print(s.twoSum([2,15,11,7], 9))
