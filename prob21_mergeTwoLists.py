@@ -2,7 +2,9 @@ from helperFunctions.linkedLists import list_to_linkedlist, linkedlist_to_list, 
 
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        # Initialize list node with dummy value (for edge case of empty lists)
         dummy = ListNode()
+        # Make "constructor" node that starts at head
         tail = dummy
 
         while l1 and l2:
