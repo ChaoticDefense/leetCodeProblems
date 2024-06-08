@@ -6,7 +6,7 @@
 
 # import statistics
 
-
+# This time complexity : O((n+m)*log(n+m))
 # class Solution:
 #     def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
         
