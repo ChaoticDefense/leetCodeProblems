@@ -25,22 +25,7 @@ def binarySearch(nums, target):
     return -1
 
 
-
-
-
-
-
-
-
 nums = [2,3,4,10,40]
 target = 12
 
 print(binarySearch(nums, target))
-# l = 0
-# r = len(nums) - 1 # index pointer
-
-# # print(r)
-
-# mid = (l+r) // 2
-
-# print(mid)
