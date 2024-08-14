@@ -31,20 +31,25 @@
 
 class Solution:
     def productExceptSelf(self, nums: list[int]) -> list[int]:
+        l_mult = 1
+        r_mult = 1
         
-        ans = []
-        A = len(nums)
+        n = len(nums)
         
-        i = 0
-       
+        l_arr = [0] * n
+        r_arr = [0] * n
         
-        while i < A:
-            L
+        for i in range(n):
+            j = -i - 1
             
-        L = []
-        R = []
-        
-        return []
+            l_arr[i] = l_mult
+            r_arr[j] = r_mult
+            
+            l_mult *= nums[i]
+            r_mult *= nums[j]
+            
+        return [l * r for l,r in zip(l_arr, r_arr)]
+            
     
 nums = [1,2,3,4]
 print(Solution().productExceptSelf(nums))
