@@ -1,0 +1,24 @@
+from collections import defaultdict
+
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+
+        counts = defaultdict(int)
+        
+        for char in magazine:
+            counts[char] += 1
+                
+        for char in ransomNote:
+            if char not in counts:
+                return False
+            elif counts[char] == 1:
+                del counts[char]
+            else:
+                counts[char] -= 1
+        
+        return True
+
+
+ransomNote = "aa"
+magazine = "aab"    
+print(Solution().canConstruct(ransomNote, magazine))
