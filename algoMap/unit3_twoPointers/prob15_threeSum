@@ -1,0 +1,43 @@
+class Solution:
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        
+        ans = []
+        
+        nums.sort()
+        n = len(nums)
+        i = 0
+        
+        for i in range(n):
+            if nums[i] > 0:
+                break
+            elif i > 0 and nums[i] == nums[i - 1]:
+                continue    
+ 
+            target = -nums[i]
+            j = i + 1
+            k = n - 1
+
+            while j < k:
+                summ = nums[j] + nums[k]
+                if summ == target:
+                    ans.append([nums[i], nums[j], nums[k]])
+                    k -= 1
+                    j += 1
+                    
+                    while j < k and nums[j - 1] == nums[j]:
+                        j += 1
+                        
+                    while j < k and nums[k + 1] == nums[k]:
+                        k -= 1
+                    
+                elif summ > target:
+                    k -= 1
+                elif summ < target:
+                    j += 1
+        
+        return ans
+    
+# nums = [-1,0,1,2,-1,-4]
+nums = [0, 0, 0]
+# nums = [-2,0,0,2,2]
+print(Solution().threeSum(nums))
