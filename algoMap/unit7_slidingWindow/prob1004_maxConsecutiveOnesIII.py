@@ -21,22 +21,35 @@ from typing import List
 
 class Solution:
     def longestOnes(self, nums: List[int], k: int) -> int:
-        longest = 0
+        # Get length of nums
         n = len(nums)
+        
+        # Init output
+        longest = 0
+        
         l = 0
+        
+        # Keep track of number zeros in window
         num_zeros = 0
+        
+        # loop over array
         for r in range(n):
+            # Keep track of number of zero
             if nums[r] == 0:
                 num_zeros += 1
-            
+             
+            # Invalid condition: number of zeros greater than number allowed
+            # Keep moving l until window is valid   
             while num_zeros > k:
                 if nums[l] == 0:
                     num_zeros -= 1
                 l += 1
-                
+            
+            # Window size, compare to longest valid window    
             w = r - l + 1
-            longest = max(longest, w) 
-                
+            longest = max(longest, w)
+        
+        
         return longest
    
 nums = [1,1,1,0,0,0,1,1,1,1,0]
