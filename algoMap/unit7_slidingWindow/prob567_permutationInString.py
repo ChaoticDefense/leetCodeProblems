@@ -25,28 +25,39 @@ class Solution:
         h1 = [0] * 26
         h2 = [0] * 26
         
+        # Get length of strings
         n1 = len(s1)
         n2 = len(s2)
         
-        l = 0
+        # Base check, s2 cannot be longer than s1
+        if n1 > n2:
+            return False
         
-        for r in range(n1):
-            h1[ord(s1[r]) - ord('a')] += 1
-            h2[ord(s2[r]) - ord('a')] += 1
+        # Build up hash set for s1 and initial hash set for s2
+        for i in range(n1):
+            h1[ord(s1[i]) - ord('a')] += 1
+            h2[ord(s2[i]) - ord('a')] += 1
+        
+        # Initial check if s2 contains permutation of s1    
+        if h1 == h2:
+            return True
+        
+        # Start at next character index and loop until end of s2   
+        for i in range(n1, n2):
+            # Move sliding window that is n1 wide
+            h2[ord(s2[i]) - ord('a')] += 1 # Add char at i to s2 hash set
+            h2[ord(s2[i-n1]) - ord('a')] -= 1 # Remove left char
             
-        for r in range(r,n2):
+            
             if h1 == h2:
                 return True
-            
-            
-            h2[ord(s2[r]) - ord('a')] += 1
-            
-            h2[ord(s2[l]) - ord('a')] -= 1
-            l += 1
+        
                                                                                                                                                                                                                                  
         return False
+    
+    # Time: O(n2) Space: O(1)
     
     
 s1 = "ab"
 s2 = "eidboaooo"
-print(Solution().checkInclusion(s1,s2))
+print(Solution().checkInclusion(s1, s2))
