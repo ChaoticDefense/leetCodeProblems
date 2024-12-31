@@ -36,6 +36,7 @@ class TreeNode:
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         
+        # Helper function (same as Prob 100) to check if trees are same at current root
         def isSameTree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
             # At leaf node at both tree
             if not p and not q:
@@ -52,13 +53,17 @@ class Solution:
             # Recursive going down both trees in the same directions
             return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
         
+        # Helper function that navigates down the main tree, checking if each root is same as subRoot
         def has_subTree(root):
+            # Base case, at leaf of root
             if not root:
                 return False
             
+            # Check current root and subRoot are same tree
             if isSameTree(root, subRoot):
                 return True
-
+            
+            # Otherwise, navigate down both left and right paths of root checking against subRoot
             return has_subTree(root.left) or has_subTree(root.right)
                 
         return has_subTree(root)
