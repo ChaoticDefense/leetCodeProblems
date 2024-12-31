@@ -35,26 +35,34 @@ class TreeNode:
         
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
-        def checkTree(p, q):
+        
+        def isSameTree(p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+            # At leaf node at both tree
             if not p and not q:
                 return True
             
+            # At leaf at one, but not other
             if not p or not q:
                 return False
             
+            # Comparing values at both roots
             if p.val != q.val:
                 return False
             
-            return checkTree(p.left, q.left) and checkTree(p.right, q.right)
+            # Recursive going down both trees in the same directions
+            return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
         
         def has_subTree(root):
             if not root:
                 return False
             
-            return  has_subTree(root.left) or has_subTree(root.right, subRoot)
-        
-        return has_subTree(root, subRoot)
-    
+            if isSameTree(root, subRoot):
+                return True
+
+            return has_subTree(root.left) or has_subTree(root.right)
+                
+        return has_subTree(root)
+
     
 A = TreeNode(3)
 B = TreeNode(4)
@@ -67,4 +75,17 @@ A.right = C
 B.left = D
 B.right = E
 
-print(Solution().isSubtree(A,B))
+# Extra case
+# E.right = TreeNode(7)
+
+B2 = TreeNode(4)
+D2 = TreeNode(1)
+E2 = TreeNode(2)
+
+B2.left = D2
+B2.right = E2
+
+# Extra case
+# E2.right = TreeNode(7)
+
+print(Solution().isSubtree(A,B2))
