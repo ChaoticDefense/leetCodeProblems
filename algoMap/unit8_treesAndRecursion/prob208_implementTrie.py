@@ -89,5 +89,3 @@ print(obj.search("app"))
 print(obj.startsWith("app"))
 obj.insert("app")
 print(obj.search("app"))
-
-x = 7
