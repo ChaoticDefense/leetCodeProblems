@@ -37,14 +37,17 @@ class Solution:
     
     # Min Heap Solution
     def findKthLargest(self, nums: List[int], k: int) -> int:
+        # Build heap from scratch
         arr = []
         
+        # Making a heap that has no more than k items
         for num in nums:
             if len(arr) < k:
                 heapq.heappush(arr, num)
             else:
                 heapq.heappushpop(arr, num)
         
+        # First item in heap will be kth largest num
         return heapq.heappop(arr)
     
 nums = [3,2,1,5,6,4]
