@@ -23,50 +23,48 @@ from typing import List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        foundWord = [False]
+        # Grab length of word
         w_len = len(word)
         
+        # Get dimensions of board
         m = len(board)
         n = len(board[0])
         
-        traveledSpaces = []
+        # Special case: board is only 1x1
+        if m == 1 and n == 1:
+            return board[0][0] == word
         
+        # Recursive function
         def backtrack(i,j,p):
-            if board[i][j] != word[p]:
-                return
-            
-            p += 1
+            # If reached end of word, then we found the whole word
             if p == w_len:
-                foundWord[0] = True
-                return
+                return True
             
-            traveledSpaces.append([i, j])
+            # If we went too far in either direction or the space does match current letter
+            if i < 0 or i >= m or j < 0 or j >= n or board[i][j] != word[p]:
+                return False
             
-            # Choosing direction to move
-            # RIGHT
-            if j < n-1 and [i, j+1] not in traveledSpaces:
-                backtrack(i, j+1, p)
+            # Set board to empty since we traversed it
+            tmp = board[i][j]
+            board[i][j] = ''
             
-            # DOWN    
-            if i < m-1 and [i+1, j] not in traveledSpaces:
-                backtrack(i+1, j, p)
-                
-            # LEFT
-            if j > 0 and [i, j-1] not in traveledSpaces:
-                backtrack(i, j-1, p)
-            
-            # UP
-            if i > 0 and [i-1, j] not in traveledSpaces:
-                backtrack(i-1, j, p)
-            
-            traveledSpaces.pop()              
+            # Check each direction
+            if backtrack(i, j+1, p+1) or backtrack(i+1, j, p+1) or backtrack(i, j-1, p+1) or backtrack(i-1, j, p+1):
+                return True
+
+            # Backtracking, return letter at current position and move on to next letter
+            board[i][j] = tmp
+            return False          
         
+        # Loop through board until starting letter is found
         for i in range(m):
             for j in range(n):
-                backtrack(i,j,0)
+                # If the word hasnt been found, keep looking
+                if backtrack(i,j,0):
+                    return True
                  
-        return foundWord[0]
+        return False
     
 board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
-word = "GUY"
+word = "ABCCED"
 print(Solution().exist(board, word))
