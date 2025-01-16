@@ -48,6 +48,6 @@ class Solution:
         backtrack(n)
         return res
     
-n = 4
-k = 4
+n = 20
+k = 20
 print(Solution().combine(n,k))
