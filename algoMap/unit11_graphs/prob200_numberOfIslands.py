@@ -25,6 +25,7 @@
 # Output: 3
 
 from typing import List
+from collections import deque
 
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
@@ -61,30 +62,64 @@ class Solution:
         #                 stack.append((a,b+1))
         #                 stack.append((a,b-1))
                         
-        # Recursive DFS              
-        def dfs(i,j):
-            # Very similar to iterative dfs checks
-            if i >= m or i < 0 or j >= n or j < 0 or grid[i][j] != "1":
-                return
+        # # Recursive DFS              
+        # def dfs(i,j):
+        #     # Very similar to iterative dfs checks
+        #     if i >= m or i < 0 or j >= n or j < 0 or grid[i][j] != "1":
+        #         return
             
-            grid[i][j] = "0"
+        #     grid[i][j] = "0"
             
-            dfs(i+1,j)
-            dfs(i-1,j)
-            dfs(i,j+1)
-            dfs(i,j-1)
+        #     dfs(i+1,j)
+        #     dfs(i-1,j)
+        #     dfs(i,j+1)
+        #     dfs(i,j-1)
         
-        # Loop over whole grid            
+        # # Loop over whole grid            
+        # for i in range(m):
+        #     for j in range(n):
+        #         # If current grid is land, add to total
+        #         if grid[i][j] == "1":
+        #             total += 1
+                    
+        #             # Then flood fill current land with water to mark as seen
+        #             dfs(i,j)
+        
+        # return total
+        
+        # Iterative BFS
+        # Loop through grid until land is found
         for i in range(m):
             for j in range(n):
-                # If current grid is land, add to total
                 if grid[i][j] == "1":
+                    # increase total by 1
                     total += 1
                     
-                    # Then flood fill current land with water to mark as seen
-                    dfs(i,j)
-        
+                    # Add current land to queue
+                    q = deque()
+                    q.append((i,j))
+                    
+                    # Loop until no more in queue
+                    while q:
+                        # Get coords from queue
+                        a, b = q.popleft()
+                        
+                        # If current coords are out of bounds or isn't land, just continue
+                        if a >= m or a < 0 or b >= n or b < 0 or grid[a][b] != "1":
+                            continue
+                        
+                        # We're at land within bounds.
+                        # Mark it as sen by changing to water
+                        grid[a][b] = "0"
+                        
+                        # All adjacent squares to queue and check them
+                        q.append((a+1,b))
+                        q.append((a-1,b))
+                        q.append((a,b+1))
+                        q.append((a,b-1))
+
         return total
+    
     
 # grid = [
 #   ["1","1","1","1","0"],
