@@ -32,16 +32,10 @@ class Solution:
                 return 0
             
             # At land within bounds, add 1 to tmp area and mark current space as wate
-            tmp_area = 1
             grid[i][j] = 0
             
             # Check each direction from current squre
-            tmp_area += dfs(i+1,j)
-            tmp_area += dfs(i-1,j)
-            tmp_area += dfs(i,j+1)
-            tmp_area += dfs(i,j-1)
-            
-            return tmp_area
+            return 1 + dfs(i+1,j) + dfs(i-1,j) + dfs(i,j+1) + dfs(i,j-1)
         
         for i in range(m):
             for j in range(n):
