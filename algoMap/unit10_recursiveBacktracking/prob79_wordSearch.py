@@ -27,8 +27,7 @@ class Solution:
         w_len = len(word)
         
         # Get dimensions of board
-        m = len(board)
-        n = len(board[0])
+        m, n = len(board), len(board[0])
         
         # Special case: board is only 1x1
         if m == 1 and n == 1:
