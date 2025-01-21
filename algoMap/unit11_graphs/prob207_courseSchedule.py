@@ -26,39 +26,54 @@ from collections import defaultdict
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         
+        # Convert edge graph to adjacency graph
         D = defaultdict(list)
         for a, b in prerequisites:
             D[a].append(b)
-            
-        visited = [0] * numCourses
-        
-        def dfs(node):
-            for nei_node in D[node]:
-                pass
-        
-        for i in range(numCourses):
-            if visited[i] == 0:
-                visited[i] = 1  
+    
+        # Constants for the state of each course
+        UNVISITED = 0
+        VISITING = 1
+        VISITED = 2
 
+        # Make array of states for each course
+        states = [UNVISITED] * numCourses
         
-        
-        
-        # seen = set()
-        # seen.add(0)
-        
-        # def dfs(node):
-        #     if not D[node]:
-        #         return True
+        # Recursive function
+        def dfs(node):
+            # Get state of current node
+            state = states[node]
             
+            # At a course we already visited and know we can finish
+            if state == VISITED:
+                return True
             
+            # At a course we currently still visiting
+            # We found a loop in the courses, therefore cannot
+            # complete all courses
+            elif state == VISITING:
+                return False
             
-        #     for nei_node in D[node]:
-        #         if nei_node not in seen:
-        #             seen.add(nei_node)
-        #             dfs(nei_node)
-                    
-        # dfs(0)
-        # return len(seen) == numCourses
+            # At a course that's unvisited, set state to visiting
+            states[node] = VISITING
+            
+            # Check each neighbor if there's a loop
+            for nei_node in D[node]:
+                if not dfs(nei_node):
+                    return False
+            
+            # No problems found from current node, set to visited and return True   
+            states[node] = VISITED
+            return True
+        
+        # Iterate over each node in graph 
+        for i in range(numCourses):
+            # If there's a problem at any node, return False
+            if not dfs(i):
+                return False
+        
+        # No problems found
+        return True
 
 # numCourses = 2
 # prerequisites = [[1,0]]
