@@ -102,7 +102,7 @@ class Solution:
                 indegrees[j] += 1
         
         # Init a queue and append only the nodes with 0 indegrees
-        # AKA "sink nodes"        
+        # AKA "source nodes"        
         q = deque([i for i in range(numCourses) if indegrees[i] == 0])
 
         # Keep looping while queue is not empty
@@ -119,7 +119,7 @@ class Solution:
                 
                 # If we have processed all indegrees of neighbor,
                 # add it to the queue because it is now essentially
-                # a "sink node"
+                # a "source node"
                 if indegrees[nei] == 0:
                     q.append(nei)
         
