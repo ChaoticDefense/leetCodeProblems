@@ -43,60 +43,85 @@ class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
         m, n = len(heights), len(heights[0])
         
-        # BFS
-        # Make queues and sets for all spaces that can flow into respective ocean
-        q_P = deque()
-        set_P = set()
+        # # BFS
+        # # Make queues and sets for all spaces that can flow into respective ocean
+        # p_que = deque()
+        # p_seen = set()
         
-        q_A = deque()
-        set_A = set()
+        # a_que = deque()
+        # a_seen = set()
         
-        # These 4 for loops initially creates the sets of all spaces that can flow into
-        # either Pacific or Atlantic Ocean
-        # Also adding to 
-        for j in range(n):
-            q_P.append((0,j))
-            set_P.add((0,j))
+        # # These 4 for loops initially creates the sets of all spaces that can flow into
+        # # either Pacific or Atlantic Ocean
+        # # Also adding to 
+        # for j in range(n):
+        #     p_que.append((0,j))
+        #     p_seen.add((0,j))
             
-        for i in range(1,m):
-            q_P.append((i,0))
-            set_P.add((i,0))
+        # for i in range(1,m):
+        #     p_que.append((i,0))
+        #     p_seen.add((i,0))
             
-        for j in range(n):
-            q_A.append((m-1,j))
-            set_A.add((m-1,j))
+        # for j in range(n):
+        #     a_que.append((m-1,j))
+        #     a_seen.add((m-1,j))
             
-        for i in range(0,m-1):
-            q_A.append((i,n-1))
-            set_A.add((i,n-1))
+        # for i in range(0,m-1):
+        #     a_que.append((i,n-1))
+        #     a_seen.add((i,n-1))
 
-        # Helper function ran on both sets that can flow into respective ocean
-        def get_coords(q: deque, seen: set):
-            # Loop until q is empty
-            while q:
-                # Pop current coords from queue
-                i, j = q.popleft()
-                # Look at each adjacent space from current space
-                # Vector is list of directions to change 
-                for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
-                    i_new, j_new = i + i_off, j + j_off
-                    # Check if we are in bounds, we can flow water from the current neighbor, and we have not seen neighbor before
-                    if 0 <= i_new < m and 0 <= j_new < n and heights[i_new][j_new] >= heights[i][j] and (i_new, j_new) not in seen:
-                        # Add neighbor to queue to be processed further and to seen set
-                        q.append((i_new,j_new))
-                        seen.add((i_new,j_new))
+        # # Helper function ran on both sets that can flow into respective ocean
+        # def get_coords(q: deque, seen: set):
+        #     # Loop until q is empty
+        #     while q:
+        #         # Pop current coords from queue
+        #         i, j = q.popleft()
+        #         # Look at each adjacent space from current space
+        #         # Vector is list of directions to change 
+        #         for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
+        #             i_new, j_new = i + i_off, j + j_off
+        #             # Check if we are in bounds, we can flow water from the current neighbor, and we have not seen neighbor before
+        #             if 0 <= i_new < m and 0 <= j_new < n and heights[i_new][j_new] >= heights[i][j] and (i_new, j_new) not in seen:
+        #                 # Add neighbor to queue to be processed further and to seen set
+        #                 q.append((i_new,j_new))
+        #                 seen.add((i_new,j_new))
                         
-            # Return the set of all spaces that can flow into the ocean
-            return seen
+        #     # Return the set of all spaces that can flow into the ocean
+        #     return seen
         
-        # Get set of all spaces that can flow into Pacific Ocean
-        p_coords = get_coords(q_P,set_P)
+        # # Get set of all spaces that can flow into Pacific Ocean
+        # p_coords = get_coords(p_que,p_seen)
         
-        # Get set of all spaces that can flow into Atlantic Ocean
-        a_coords = get_coords(q_A,set_A)
+        # # Get set of all spaces that can flow into Atlantic Ocean
+        # a_coords = get_coords(a_que,a_seen)
         
-        # Return intersection of both sets (which spaces are in both sets)
-        return list(p_coords.intersection(a_coords))
+        # # Return intersection of both sets (which spaces are in both sets)
+        # return list(p_coords.intersection(a_coords))
+        
+        # DFS Recursive
+        p_seen = set()
+        a_seen = set()
+            
+        # Recursive function
+        def dfs(i,j,h,seen):
+            if i < 0 or i >= m or j < 0 or j >= n or heights[i][j] < h or (i,j) in seen:
+                return
+            
+            seen.add((i,j))
+            for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
+                i_new, j_new = i + i_off, j + j_off
+                dfs(i_new,j_new,heights[i][j],seen)
+           
+        # Only start DFS on boundaries of the oceans 
+        for i in range(m):
+            dfs(i,0,heights[i][0],p_seen) # Pacific left
+            dfs(i,n-1, heights[i][n-1],a_seen) # Atlantic right
+            
+        for j in range(n):
+            dfs(0,j,heights[0][j],p_seen) # Pacific top
+            dfs(m-1,j,heights[m-1][j],a_seen) # Atlantic bottom
+            
+        return list(p_seen.intersection(a_seen))
 
 heights = [[1,2,2,3,5],
            [3,2,3,4,4],
