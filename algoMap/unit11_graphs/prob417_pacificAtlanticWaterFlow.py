@@ -53,7 +53,7 @@ class Solution:
         
         # # These 4 for loops initially creates the sets of all spaces that can flow into
         # # either Pacific or Atlantic Ocean
-        # # Also adding to 
+        # # Also adding to queues for respective ocean
         # for j in range(n):
         #     p_que.append((0,j))
         #     p_seen.add((0,j))
@@ -98,30 +98,77 @@ class Solution:
         # # Return intersection of both sets (which spaces are in both sets)
         # return list(p_coords.intersection(a_coords))
         
-        # DFS Recursive
-        p_seen = set()
-        a_seen = set()
+        # # DFS Recursive
+        # p_seen = set()
+        # a_seen = set()
             
-        # Recursive function
-        def dfs(i,j,h,seen):
-            if i < 0 or i >= m or j < 0 or j >= n or heights[i][j] < h or (i,j) in seen:
-                return
+        # # Recursive function
+        # def dfs(i,j,h,seen):
+        #     # Base case: Out of bounds, curr space less than previous, or we've been here before
+        #     if i < 0 or i >= m or j < 0 or j >= n or heights[i][j] < h or (i,j) in seen:
+        #         return
             
-            seen.add((i,j))
-            for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
-                i_new, j_new = i + i_off, j + j_off
-                dfs(i_new,j_new,heights[i][j],seen)
+        #     # Add current space to list that can flow into ocean
+        #     seen.add((i,j))
+        #     for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
+        #         i_new, j_new = i + i_off, j + j_off
+        #         dfs(i_new,j_new,heights[i][j],seen)
            
-        # Only start DFS on boundaries of the oceans 
-        for i in range(m):
-            dfs(i,0,heights[i][0],p_seen) # Pacific left
-            dfs(i,n-1, heights[i][n-1],a_seen) # Atlantic right
+        # # Only start DFS on boundaries of the oceans 
+        # for i in range(m):
+        #     dfs(i,0,heights[i][0],p_seen) # Pacific left
+        #     dfs(i,n-1, heights[i][n-1],a_seen) # Atlantic right
+            
+        # for j in range(n):
+        #     dfs(0,j,heights[0][j],p_seen) # Pacific top
+        #     dfs(m-1,j,heights[m-1][j],a_seen) # Atlantic bottom
+            
+        # return list(p_seen.intersection(a_seen))
+        
+        # DFS Iterative
+        p_seen, a_seen = set(), set()
+        p_stack, a_stack = [], []
+        
+        for j in range(n):
+            p_stack.append((0,j))
+            p_seen.add((0,j))
+            
+        for i in range(1,m):
+            p_stack.append((i,0))
+            p_seen.add((i,0))
             
         for j in range(n):
-            dfs(0,j,heights[0][j],p_seen) # Pacific top
-            dfs(m-1,j,heights[m-1][j],a_seen) # Atlantic bottom
+            a_stack.append((m-1,j))
+            a_seen.add((m-1,j))
             
-        return list(p_seen.intersection(a_seen))
+        for i in range(0,m-1):
+            a_stack.append((i,n-1))
+            a_seen.add((i,n-1))
+    
+        # Helper function ran on both sets that can flow into respective ocean
+        def get_coords(s: List, seen: set):
+            # Loop until s is empty
+            while s:
+                # Pop current coords from stack
+                i, j = s.pop()
+                # Look at each adjacent space from current space
+                # Vector is list of directions to change 
+                for i_off, j_off in [(0,1), (1,0), (-1,0), (0,-1)]: # Right, Down, Left, Up
+                    i_new, j_new = i + i_off, j + j_off
+                    # Check if we are in bounds, we can flow water from the current neighbor, and we have not seen neighbor before
+                    if 0 <= i_new < m and 0 <= j_new < n and heights[i_new][j_new] >= heights[i][j] and (i_new, j_new) not in seen:
+                        # Add neighbor to queue to be processed further and to seen set
+                        s.append((i_new,j_new))
+                        seen.add((i_new,j_new))
+                        
+            # Return the set of all spaces that can flow into the ocean
+            return seen
+        
+        a_coords = get_coords(a_stack,a_seen)
+        p_coords = get_coords(p_stack,p_seen)
+        
+        return list(a_coords.intersection(p_coords))
+    
 
 heights = [[1,2,2,3,5],
            [3,2,3,4,4],
