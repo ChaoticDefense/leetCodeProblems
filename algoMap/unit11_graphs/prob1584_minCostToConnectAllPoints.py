@@ -22,7 +22,6 @@
 
 from typing import List
 import heapq
-from collections import deque
 
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
