@@ -26,25 +26,40 @@ from collections import deque
 
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        # Init minCost
         minCost = 0
+        # Get length of points
         n = len(points)
+        
+        # Add first point cost to get to this point (which is 0) and index
         heap = [(0,0)]
         
+        # Make a set of points we have been to
         seen = set()
         
+        # Loop until we have been to all of the points
         while len(seen) < n:
+            # Pop current point distance (from other point) and index from heap
+            # Pops the smallest distance point
             d, i = heapq.heappop(heap)
+            
+            # Check if we have been here before
             if i not in seen:
                 minCost += d
                 seen.add(i)
+                # Get x and y coords of point
                 x, y = points[i]
+                
+                # Loop through all other points in list that are not current point
                 for p in range(n):
                     if p == i:
                         continue
+                    # Get distance to other points from current point and add them to the heap
                     x_p, y_p = points[p]
                     tmpDist = abs(x_p - x) + abs(y_p - y)
                     heapq.heappush(heap, (tmpDist, p))
-                    
+        
+        # After we have been to each point, the minimum cost will be the shortest dist to connect each point           
         return minCost
     
 points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
